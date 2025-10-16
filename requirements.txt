@@ -9,3 +9,5 @@ fastapi[all]
 python-dotenv
 python-jose[cryptography]
 passlib[bcrypt]
+pymysql
+alembic
