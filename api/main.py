@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.config.database import Base, engine
-from api.routes import bank_routes, bank_account_routes, wallet_routes
+from api.routes import bank_routes, bank_account_routes, wallet_routes, transaction_type_routes
 
 Base.metadata.create_all(bind=engine)
 
@@ -18,6 +18,7 @@ app.add_middleware(
 app.include_router(bank_routes.router)
 app.include_router(bank_account_routes.router)
 app.include_router(wallet_routes.router)
+app.include_router(transaction_type_routes.router)
 
 @app.get("/")
 def root():

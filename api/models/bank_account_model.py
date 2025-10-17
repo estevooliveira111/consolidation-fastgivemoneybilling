@@ -32,3 +32,4 @@ class BankAccount(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, comment="Data da última atualização do registro")
 
     bank = relationship("Bank", backref="accounts")
+    wallets = relationship("Wallet", back_populates="bank_account")
