@@ -4,7 +4,7 @@ from api.config.database import get_db
 from api.schemas.wallet_schema import WalletCreate, WalletUpdate, WalletResponse
 from api.controllers import wallet_controller
 
-router = APIRouter(prefix="/wallets", tags=["Wallets"])
+router = APIRouter(prefix="/wallets", tags=["Carteiras"])
 
 @router.get("/", response_model=list[WalletResponse])
 def list_wallets(db: Session = Depends(get_db)):

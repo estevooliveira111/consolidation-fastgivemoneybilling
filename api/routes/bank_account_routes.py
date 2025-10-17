@@ -4,7 +4,7 @@ from api.config.database import get_db
 from api.schemas.bank_account_schema import BankAccountCreate, BankAccountUpdate, BankAccountResponse
 from api.controllers import bank_account_controller
 
-router = APIRouter(prefix="/bank-accounts", tags=["Bank Accounts"])
+router = APIRouter(prefix="/bank-accounts", tags=["Contas Bancárias"])
 
 @router.get("/", response_model=list[BankAccountResponse])
 def list_accounts(

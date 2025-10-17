@@ -4,7 +4,7 @@ from api.config.database import get_db
 from api.schemas.bank_schema import BankCreate, BankUpdate, BankResponse
 from api.controllers import bank_controller
 
-router = APIRouter(prefix="/banks", tags=["Banks"])
+router = APIRouter(prefix="/banks", tags=["Bancos"])
 
 @router.get("/", response_model=list[BankResponse])
 def list_banks(db: Session = Depends(get_db)):
