@@ -23,3 +23,7 @@ alembic revision --autogenerate -m "..."
 
 🔁 4. Aplique a migração ao banco de dados
 alembic upgrade head
+
+alembic revision --autogenerate -m "add balance to bank_accounts"
+
+alembic upgrade head

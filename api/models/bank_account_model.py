@@ -23,7 +23,7 @@ class BankAccount(Base):
     status = Column(String(20), nullable=False, default="active", comment="Status da conta (ativo/inativo)")
     extra_data = Column(JSON, nullable=True, comment="Metadados adicionais da conta")
 
-    balance = Column(Float, default=0.0, comment="Saldo atual da Conta")
+    balance = Column(Float, default=0.0, comment="Saldo atual da conta")
 
     cost_boleto = Column(Float, nullable=True, comment="Custo por emissão de boleto simples")
     cost_boleto_hybrid = Column(Float, nullable=True, comment="Custo por emissão de boleto híbrido")

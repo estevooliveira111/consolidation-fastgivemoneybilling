@@ -7,8 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from api.config.database import Base
-from api.models.bank_model import Bank
-from api.models.bank_account_model import BankAccount
+from api.models import bank_account_model, bank_model, transaction_model, transaction_type_model, wallet_model
 
 config = context.config
 

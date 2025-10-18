@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..config.database import SessionLocal
 from ..models.transaction_type_model import TransactionType
+from ..models.bank_model import Bank
 
 fake = Faker("pt_BR")
 
@@ -50,12 +51,51 @@ def create_transaction_types(db: Session):
     return created
 
 
+def create_banks(db: Session):
+    banks = [
+        {"name": "BB", "full_name": "Banco do Brasil S.A.", "code": "001", "ispb": "00000000"},
+        {"name": "Sicredi", "full_name": "Sicredi Cooperativa de Crédito", "code": "748", "ispb": "00000001"},
+        {"name": "Sicoob", "full_name": "Sicoob Cooperativa de Crédito", "code": "756", "ispb": "00000002"},
+    ]
+
+    created = []
+    for b in banks:
+        existing = db.query(Bank).filter(Bank.code == b["code"]).first()
+        if existing:
+            existing.name = b["name"]
+            existing.full_name = b["full_name"]
+            existing.ispb = b["ispb"]
+            created.append(existing)
+            continue
+
+        new_bank = Bank(
+            external_id=str(uuid.uuid4()),
+            name=b["name"],
+            full_name=b["full_name"],
+            code=b["code"],
+            ispb=b["ispb"],
+            country="BR"
+        )
+        db.add(new_bank)
+        created.append(new_bank)
+
+    db.commit()
+    for c in created:
+        db.refresh(c)
+    return created
+
+
 def run_seed(drop=False):
     db = SessionLocal()
     try:
         print("Criando TransactionTypes e tipos de Taxas...")
         types = create_transaction_types(db)
         print(f"TransactionTypes criados/atualizados: {len(types)}")
+
+        print("Criando bancos...")
+        banks = create_banks(db)
+        print(f"Bancos criados/atualizados: {len(banks)}")
+
         print("Seed finalizado com sucesso.")
     except Exception as e:
         db.rollback()

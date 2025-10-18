@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from api.models.transaction_model import Transaction
+from api.models.transaction_model import TransactionModel as Transaction 
 from api.schemas.transaction_schema import TransactionCreate, TransactionUpdate
 
 
