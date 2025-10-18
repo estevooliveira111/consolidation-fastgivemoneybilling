@@ -42,3 +42,4 @@ class Transaction(Base):
     wallet = relationship("Wallet", back_populates="transactions")
     type = relationship("TransactionType", back_populates="transactions")
     account = relationship("BankAccount")
+

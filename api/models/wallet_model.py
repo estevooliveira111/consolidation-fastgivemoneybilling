@@ -27,5 +27,6 @@ class Wallet(Base):
     balance = Column(Float, default=0.0, comment="Saldo atual da carteira")
     currency = Column(String(10), default="BRL", comment="Moeda associada à carteira")
 
+    transactions = relationship("Transaction", back_populates="wallet")
     bank_account_id = Column(Integer, ForeignKey("bank_accounts.id"), nullable=True, comment="ID da conta bancária associada")
     bank_account = relationship("BankAccount", back_populates="wallets")

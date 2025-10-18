@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.orm import relationship
 from api.config.database import Base
 
 class TransactionType(Base):
@@ -12,3 +13,5 @@ class TransactionType(Base):
     description = Column(String(255), nullable=True, comment="Descrição do tipo de transação")
 
     status = Column(String(20), default="active", comment="Status do tipo de transação (ativo/inativo)")
+
+    transactions = relationship("Transaction", back_populates="type")
