@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from api.config.database import get_db
 from api.schemas.wallet_schema import WalletCreate, WalletUpdate, WalletResponse
@@ -6,9 +6,18 @@ from api.controllers import wallet_controller
 
 router = APIRouter(prefix="/wallets", tags=["Carteiras"])
 
+
 @router.get("/", response_model=list[WalletResponse])
-def list_wallets(db: Session = Depends(get_db)):
-    return wallet_controller.list_wallets(db)
+def list_wallets(
+    db: Session = Depends(get_db),
+    skip: int = Query(0, ge=0, description="Número de registros a pular"),
+    limit: int = Query(10, ge=1, le=100, description="Número máximo de registros a retornar")
+):
+    """
+    Lista todas as wallets com a relação bank_account carregada,
+    aplicando paginação.
+    """
+    return wallet_controller.list_wallets(db, skip=skip, limit=limit)
 
 @router.get("/{wallet_id}", response_model=WalletResponse)
 def get_wallet(wallet_id: int, db: Session = Depends(get_db)):

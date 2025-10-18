@@ -68,11 +68,16 @@ class BankAccountUpdate(BaseModel):
     extra_data: Optional[Dict[str, Any]] = Field(None, description="Informações adicionais em formato JSON")
 
 
-class BankAccountResponse(BankAccountBase):
+class BankAccountResponse(BaseModel):
     """Schema de resposta de uma conta bancária."""
     id: int = Field(..., description="ID interno da conta")
     external_id: str = Field(..., description="Identificador externo único da conta (UUID)")
+    account_name: str = Field(..., description="Nome da conta")
+    holder_name: str = Field(..., description="Nome do titular da conta")
+    bank_id: int = Field(..., description="ID do banco associado")
     bank: Optional[BankResponse] = Field(None, description="Banco associado à conta")
+    currency: str = Field(..., description="Moeda da conta")
+    status: str = Field(..., description="Status da conta (ativo/inativo)")
 
     class Config:
         from_attributes = True
