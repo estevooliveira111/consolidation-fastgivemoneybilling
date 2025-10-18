@@ -22,7 +22,7 @@ class TransactionModel(Base):
     __tablename__ = "transactions"
 
     id = Column(Integer, primary_key=True, index=True)
-    wallet_id = Column(Integer, ForeignKey("wallets.id"), nullable=False)
+    wallet_id = Column(Integer, ForeignKey("wallets.id"), nullable=True)
     type_id = Column(Integer, ForeignKey("transaction_types.id"), nullable=False)
     account_id = Column(Integer, ForeignKey("bank_accounts.id"), nullable=False)
     payment_method = Column(Enum(PaymentMethod), nullable=False)

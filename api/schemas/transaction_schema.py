@@ -1,8 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from datetime import datetime
 from typing import Optional, Dict
 from enum import Enum
+from sqlalchemy.orm import Session
 
+from api.config.database import SessionLocal
+from api.models.wallet_model import Wallet
+from api.models.transaction_type_model import TransactionType
+from api.models.bank_account_model import BankAccount
 
 class PaymentMethod(str, Enum):
     pix = "pix"
@@ -28,7 +33,7 @@ class PartyInfo(BaseModel):
 
 
 class TransactionBase(BaseModel):
-    wallet_id: int
+    wallet_id: Optional[int]
     type_id: int
     account_id: Optional[int] = None
     payment_method: PaymentMethod
@@ -43,6 +48,35 @@ class TransactionBase(BaseModel):
     payment_date: Optional[datetime] = None
     event_date: Optional[datetime] = None
     details: Optional[Dict] = None
+
+    @validator("wallet_id")
+    def validate_wallet_exists(cls, v):
+        db: Session = SessionLocal()
+        wallet = db.query(Wallet).filter(Wallet.id == v).first()
+        db.close()
+        if not wallet:
+            raise ValueError(f"Wallet com id={v} não encontrada")
+        return v
+
+    @validator("type_id")
+    def validate_type_exists(cls, v):
+        db: Session = SessionLocal()
+        tx_type = db.query(TransactionType).filter(TransactionType.id == v).first()
+        db.close()
+        if not tx_type:
+            raise ValueError(f"TransactionType com id={v} não encontrado")
+        return v
+
+    @validator("account_id")
+    def validate_account_exists(cls, v):
+        if v is None:
+            return v
+        db: Session = SessionLocal()
+        account = db.query(BankAccount).filter(BankAccount.id == v).first()
+        db.close()
+        if not account:
+            raise ValueError(f"BankAccount com id={v} não encontrado")
+        return v
 
 
 class TransactionCreate(TransactionBase):

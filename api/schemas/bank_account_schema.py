@@ -1,6 +1,9 @@
 from pydantic import BaseModel, constr, Field, validator
+from sqlalchemy.orm import Session
 from typing import Optional, Dict, Any
 from .bank_schema import BankResponse
+from api.models.bank_model import Bank
+from api.config.database import SessionLocal
 
 class BankAccountBase(BaseModel):
     """Base de dados de uma conta bancária."""
@@ -36,6 +39,15 @@ class BankAccountBase(BaseModel):
         allowed = ["active", "inactive"]
         if v not in allowed:
             raise ValueError(f"Status inválido. Permitidos: {allowed}")
+        return v
+    
+    @validator("bank_id")
+    def validate_bank_exists(cls, v):
+        db: Session = SessionLocal()
+        bank = db.query(Bank).filter(Bank.id == v).first()
+        db.close()
+        if not bank:
+            raise ValueError(f"Banco com id={v} não encontrado")
         return v
 
 
